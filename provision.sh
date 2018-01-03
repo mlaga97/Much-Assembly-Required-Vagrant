@@ -8,9 +8,6 @@ debconf-set-selections <<< 'mysql-server mysql-server/root_password_again passwo
 # Install Packages
 apt-get -y install apache2 maven mysql-server php7.0 openjdk-8-jdk libapache2-mod-php php-mcrypt php-mysql
 
-# Restart apache to make MySQL work
-systemctl restart apache2
-
 # Go to the appropriate directory
 cd /vagrant
 
@@ -29,9 +26,12 @@ mysql -u root -pmar -e "CREATE USER 'mar'@'localhost' IDENTIFIED BY 'mar';"
 mysql -u root -pmar -e "GRANT ALL PRIVILEGES ON mar.* TO 'mar'@'localhost' WITH GRANT OPTION;"
 mysql -u root -pmar mar < Much-Assembly-Required-Frontend/database.sql
 
-# Publish the web interface
-rm -r /var/www/html
-ln -sT /vagrant/Much-Assembly-Required-Frontend/ /var/www/html
+# Change apache config
+sudo sed -i 's|/var/www|/vagrant/Much-Assembly-Required-Frontend|' /etc/apache2/apache2.conf
+sudo sed -i 's|/var/www/html|/vagrant/Much-Assembly-Required-Frontend|' /etc/apache2/sites-enabled/000-default.conf
+
+# Restart apache
+systemctl restart apache2
 
 # Build the server
 cd /vagrant/Much-Assembly-Required/ && mvn package
