@@ -6,7 +6,7 @@ debconf-set-selections <<< 'mysql-server mysql-server/root_password password mar
 debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password mar'
 
 # Install Packages
-apt-get -y install apache2 maven mysql-server php7.0 openjdk-8-jdk libapache2-mod-php php-mcrypt php-mysql
+apt-get -y install apache2 maven mysql-server php7.0 openjdk-8-jdk libapache2-mod-php php-mcrypt php-mysql mongodb
 
 # Go to the appropriate directory
 cd /vagrant
